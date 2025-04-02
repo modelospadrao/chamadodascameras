@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abertura de Chamado para Câmeras</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <style>
+       body { font-family: Cambria, Cochin, Georgia, Times, sans-serif; }
+        .container { width: 90%; margin: auto; }
+        textarea { width: 100%; height: 469px; }
+        .hidden { display: none; }
+        input[type="text"], input[type="date"], input[type="number"], .supervisor-box, .preview-text {
+            width: 100%;
+            padding: 9px;
+            margin: 6px 0;
+            font-size: 14px;
+            border: 1px solid #ddd;
+            text-transform: uppercase; /* Adicionando caixa alta */
+            background-color: #f0f0f0;
+        }
+        .button-default {
+            border: 1px solid black;
+            padding: 8px 16px;
+            margin: 5px;
+            background-color: #fff;
+            cursor: pointer;
+            font-size: 14px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+        .button-default:hover {
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+        .preview-box {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-top: 20px;
+            background-color: #f0f0f0;
+            white-space: pre-wrap;
+            font-family: monospace;
+            font-size: 14px;
+        }
+        .clear-button {
+            background-color: #f44336;
+            color: white;
+            padding: 8px 16px;
+            margin: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+        #popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            font-size: 16px;
+            border-radius: 5px;
+            z-index: 1000;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            text-align: center;
+        }
+        #popup-close {
+            margin-top: 10px;
+            background-color: white;
+            color: black;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .button-yes {
+            background-color: #fff;
+            color: #000;
+            border: 1px solid #ddd;
+        }
+        .button-yes.selected {
+            background-color: #000;
+            color: #fff;
+            border: 1px solid #000;
+        }
+        .button-no {
+            background-color: #fff;
+            color: #000;
+            border: 1px solid #ddd;
+        }
+        .button-no.selected {
+            background-color: #000;
+            color: #fff;
+            border: 1px solid #000;
+        }
+        input[type="tel"] {
+            width: 100%;
+            padding: 9px;
+            margin: 6px 0;
+            font-size: 14px;
+            border: 1px solid #ddd;
+            text-transform: uppercase;
+            background-color: #f0f0f0;
+        }
+        input, select {
+            width: 100%;
+            padding: 9px;
+            margin: 6px 0;
+            font-size: 14px;
+            border: 1px solid #ddd;
+            text-transform: uppercase;
+            background-color: #f0f0f0;
+        }
+        .button-enviarWhatsApp {
+            background-color: #00b145;
+            color: white;
+            padding: 8px 16px;
+            margin: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+        .button-gerarMensagem {
+            background-color: #616964;
+            color: white;
+            padding: 8px 16px;
+            margin: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        } 
+        .button-copiarMensagem {
+            background-color: #ffffff;
+            color: #000000;
+            padding: 8px 16px;
+            margin: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        } 
+    </style>
+</head>
+<body>
+    <h2 style="text-align: center; font-size: 25px; font-weight: bold; color: #e63946;">ABERTURA DE CHAMADO DAS CÂMERAS</h2>
+    <h2 style="text-align: center; font-size: 21px; font-weight: bold; color: #000;">(Versão 2.0)</h2>
+    <h2>🗒️ Preencha os dados</h2>
+    <form id="checklist-form">
+        <!-- Dados da viatura -->
+        <label for="check-in-date">📅 Data Check-In:</label>
+        <input type="date" id="check-in-date">
+        
+        <label for="placa">🚗 Placa:</label>
+        <select id="placa">
+            <option value="EJL6060">EJL6060</option>
+            <option value="EUR2259">EUR2259</option>
+            <option value="FCR5D73">FCR5D73</option>
+            <option value="FPG3378">FPG3378</option>
+            <option value="FRY6801">FRY6801</option>
+            <option value="FSL3517">FSL3517</option>
+            <option value="FSR8726">FSR8726</option>
+            <option value="FSY0983">FSY0983</option>
+            <option value="FUW2698">FUW2698</option>
+            <option value="FVL4763">FVL4763</option>
+            <option value="FWA7238">FWA7238</option>
+            <option value="FWP8553">FWP8553</option>
+            <option value="GBE4994">GBE4994</option>
+            <option value="GBG5759">GBG5759</option>
+            <option value="GCR2495">GCR2495</option>
+            <option value="GIU1296">GIU1296</option>
+            <option value="RFF7B60">RFF7B60</option>
+            <option value="RFF7B61">RFF7B61</option>
+            <option value="RIV1G74">RIV1G74</option>
+            <option value="RNL2J55">RNL2J55</option>
+            <option value="SAN3H15">SAN3H15</option>
+            <option value="SAN7C85">SAN7C85</option>
+            <option value="SAN7E06">SAN7E06</option>
+            <option value="SAP0G45">SAP0G45</option>
+            <option value="SAP9C26">SAP9C26</option>
+            <option value="SAQ8I56">SAQ8I56</option>
+            <option value="SAR0I06">SAR0I06</option>
+            <option value="SAS6B45">SAS6B45</option>
+            <option value="SAT0B35">SAT0B35</option>
+            <option value="SAU2E45">SAU2E45</option>
+            <option value="SAX1A06">SAX1A06</option>
+            <option value="SAX1G86">SAX1G86</option>
+            <option value="SAY2I95">SAY2I95</option>
+            <option value="SAY7G95">SAY7G95</option>
+            <option value="SAZ2F95">SAZ2F95</option>
+            <option value="SBA7C95">SBA7C95</option>
+            <option value="SBB3D25">SBB3D25</option>
+            <option value="SBB7E55">SBB7E55</option>
+            <option value="SBB9J75">SBB9J75</option>
+            <option value="SBC0H15">SBC0H15</option>
+            <option value="SBL6C85">SBL6C85</option>
+            <option value="SBM6C95">SBM6C95</option>
+            <option value="SBP3C15">SBP3C15</option>
+            <option value="SBP7G65">SBP7G65</option>
+            <option value="SBQ3C75">SBQ3C75</option>
+            <option value="SBS3J35">SBS3J35</option>
+            <option value="SBS6B35">SBS6B35</option>
+            <option value="SBS7E15">SBS7E15</option>
+            <option value="SBT0G15">SBT0G15</option>
+            <option value="SBT0H95">SBT0H95</option>
+            <option value="SBT2I55">SBT2I55</option>
+            <option value="SBT4A75">SBT4A75</option>
+            <option value="SBU2D06">SBU2D06</option>
+            <option value="SBV0B65">SBV0B65</option>
+        </select>
+
+        <label for="responsavel">👤 Responsável do Checklist:</label>
+        <select id="responsavel">
+            <option value="Adalberto Girao Matos">Adalberto Girao Matos</option>
+            <option value="Ademar Marcos Garcia da Silva">Ademar Marcos Garcia da Silva</option>
+            <option value="Adriano Araujo Gomes">Adriano Araujo Gomes</option>
+            <option value="Agenor Alves Da Silva">Agenor Alves Da Silva</option>
+            <option value="Aldenir Nascimento De Sousa">Aldenir Nascimento De Sousa</option>
+            <option value="Alessandra Da Rocha Martins Miranda">Alessandra Da Rocha Martins Miranda</option>
+            <option value="Alexandre Araujo Amaral">Alexandre Araujo Amaral</option>
+            <option value="Alexandro Augusto Costa Souto">Alexandro Augusto Costa Souto</option>
+            <option value="Alexssandro Lopes">Alexssandro Lopes</option>
+            <option value="Alzito Pereira Lima">Alzito Pereira Lima</option>
+            <option value="Ana Cecilia Rodrigues">Ana Cecilia Rodrigues</option>
+            <option value="Anderson Barbosa Da Silva">Anderson Barbosa Da Silva</option>
+            <option value="Anderson Lemos Tomaz Nogueira">Anderson Lemos Tomaz Nogueira</option>
+            <option value="Andre Carvalho Da Costa">Andre Carvalho Da Costa</option>
+            <option value="Antonio Carlos Fraga Silva">Antonio Carlos Fraga Silva</option>
+            <option value="Antonio Charle do Nascimento Araujo">Antonio Charle do Nascimento Araujo</option>
+            <option value="Antonio Duarte Dos Santos">Antonio Duarte Dos Santos</option>
+            <option value="Antonio Henrique Santos">Antonio Henrique Santos</option>
+            <option value="Antonio Jose Almeida Silva">Antonio Jose Almeida Silva</option>
+            <option value="Antonio Jose Passos dos Santos">Antonio Jose Passos dos Santos</option>
+            <option value="Antônio Kacio da Costa Alves">Antônio Kacio da Costa Alves</option>
+            <option value="Antonio Laecio Da Silva Oliveira">Antonio Laecio Da Silva Oliveira</option>
+            <option value="Antonio Magalhaes Bertini Junior">Antonio Magalhaes Bertini Junior</option>
+            <option value="Antonio Marcio Mendes Da Silva">Antonio Marcio Mendes Da Silva</option>
+            <option value="Antonio Marcos Martins Temoteo">Antonio Marcos Martins Temoteo</option>
+            <option value="Antonio Wandeson Da Silva Mota">Antonio Wandeson Da Silva Mota</option>
+            <option value="Antoniza Alves De Sousa">Antoniza Alves De Sousa</option>
+            <option value="Antunes Ferreira De Sousa">Antunes Ferreira De Sousa</option>
+            <option value="Ari Mendes Dos Santos">Ari Mendes Dos Santos</option>
+            <option value="Aristides Dos Santos Oliveira">Aristides Dos Santos Oliveira</option>
+            <option value="Athson De Lima Campelo">Athson De Lima Campelo</option>
+            <option value="Auberlanio Ferreira Lima">Auberlanio Ferreira Lima</option>
+            <option value="Augusto de Sales Lira">Augusto de Sales Lira</option>
+            <option value="Augusto Holanda Araujo">Augusto Holanda Araujo</option>
+            <option value="Bernardo Roque Pacheco">Bernardo Roque Pacheco</option>
+            <option value="Carlos Augusto de Sousa">Carlos Augusto de Sousa</option>
+            <option value="Carlos Henrique Silva Dos Santos">Carlos Henrique Silva Dos Santos</option>
+            <option value="Cicero Eudes da Silva">Cicero Eudes da Silva</option>
+            <option value="Claudio Horran Mesquita De Sousa">Claudio Horran Mesquita De Sousa</option>
+            <option value="Cleyton Vieira Chagas">Cleyton Vieira Chagas</option>
+            <option value="Cristiano Almeida da Silva">Cristiano Almeida da Silva</option>
+            <option value="Daniel Menezes Girao">Daniel Menezes Girao</option>
+            <option value="Davi Maciel Costa">Davi Maciel Costa</option>
+            <option value="Dennildo Castelo Branco de Lima">Dennildo Castelo Branco de Lima</option>
+            <option value="Diego Augusto Marques De Oliveira">Diego Augusto Marques De Oliveira</option>
+            <option value="Diniz Da Silva Pinto">Diniz Da Silva Pinto</option>
+            <option value="Dirceu Miranda De Andrade">Dirceu Miranda De Andrade</option>
+            <option value="Edivaldo Alves De Lima">Edivaldo Alves De Lima</option>
+            <option value="Edmilson Mendes Silva">Edmilson Mendes Silva</option>
+            <option value="Edson Gonçalves Da Silva">Edson Gonçalves Da Silva</option>
+            <option value="Edson Rodrigues Furtado Filho">Edson Rodrigues Furtado Filho</option>
+            <option value="Edvan De Sousa Correia">Edvan De Sousa Correia</option>
+            <option value="Elizeu Da Silva Ribeiro">Elizeu Da Silva Ribeiro</option>
+            <option value="Elton Sousa Cavalcante">Elton Sousa Cavalcante</option>
+            <option value="Emanuel Da Costa Gomes">Emanuel Da Costa Gomes</option>
+            <option value="Emerson Ricardo Do Nascimento Carvalho">Emerson Ricardo Do Nascimento Carvalho</option>
+            <option value="Emilio Marcos Teixeira Da Silva">Emilio Marcos Teixeira Da Silva</option>
+            <option value="Enedino Sousa da Costa">Enedino Sousa da Costa</option>
+            <option value="Esmael De Azevedo Morais">Esmael De Azevedo Morais</option>
+            <option value="Fabiano Pinheiro Da Silva">Fabiano Pinheiro Da Silva</option>
+            <option value="Flavio Jose Da Silva">Flavio Jose Da Silva</option>
+            <option value="Franciana De Lima Sousa Ferreira Gomes">Franciana De Lima Sousa Ferreira Gomes</option>
+            <option value="Francisco Adelino Dutra De Souza">Francisco Adelino Dutra De Souza</option>
+            <option value="Francisco Aderlan Abreu Do Nascimento">Francisco Aderlan Abreu Do Nascimento</option>
+            <option value="Francisco Adolfo Alves Moreira">Francisco Adolfo Alves Moreira</option>
+            <option value="Francisco Americo Farias Caetano">Francisco Americo Farias Caetano</option>
+            <option value="Francisco Antonio Menezes Da Silva">Francisco Antonio Menezes Da Silva</option>
+            <option value="Francisco Antonio Souza Batista">Francisco Antonio Souza Batista</option>
+            <option value="Francisco Arnaldo Rodrigues Maciel">Francisco Arnaldo Rodrigues Maciel</option>
+            <option value="Francisco Audir Nogueira da Silva">Francisco Audir Nogueira da Silva</option>
+            <option value="Francisco Carlos Veras De Oliveira">Francisco Carlos Veras De Oliveira</option>
+            <option value="Francisco Clecio De Souza">Francisco Clecio De Souza</option>
+            <option value="Francisco Cleyson Da Costa Matias">Francisco Cleyson Da Costa Matias</option>
+            <option value="Francisco Cristiano Albano Gomes">Francisco Cristiano Albano Gomes</option>
+            <option value="Francisco Das Chagas De Medeiros Oliveira">Francisco Das Chagas De Medeiros Oliveira</option>
+            <option value="Francisco Deone da Silva Lopes">Francisco Deone da Silva Lopes</option>
+            <option value="Francisco Edinaldo De Sousa Braz">Francisco Edinaldo De Sousa Braz</option>
+            <option value="Francisco Ednaldo Ferreira Marcolino">Francisco Ednaldo Ferreira Marcolino</option>
+            <option value="Francisco Elton Martins Pinheiro">Francisco Elton Martins Pinheiro</option>
+            <option value="Francisco Emanuel Aguiar da Silva">Francisco Emanuel Aguiar da Silva</option>
+            <option value="Francisco Farias Pereira">Francisco Farias Pereira</option>
+            <option value="Francisco Iranildo Da Penha">Francisco Iranildo Da Penha</option>
+            <option value="Francisco Jacinto Guedes Lima">Francisco Jacinto Guedes Lima</option>
+            <option value="Francisco Jose Barbosa Lima">Francisco Jose Barbosa Lima</option>
+            <option value="Francisco Jose Martins de Freitas">Francisco Jose Martins de Freitas</option>
+            <option value="Francisco Jose Oliveira Viana">Francisco Jose Oliveira Viana</option>
+            <option value="Francisco Lindemberg Souza Costa">Francisco Lindemberg Souza Costa</option>
+            <option value="Francisco Mesquita De Oliveira">Francisco Mesquita De Oliveira</option>
+            <option value="Francisco Odesio Correia de Brito">Francisco Odesio Correia de Brito</option>
+            <option value="Francisco Osmar Pereira Andrade">Francisco Osmar Pereira Andrade</option>
+            <option value="Francisco Paulo Nascimento Leao">Francisco Paulo Nascimento Leao</option>
+            <option value="Francisco Ribeiro De Araujo">Francisco Ribeiro De Araujo</option>
+            <option value="Francisco Roberto Barros Silva">Francisco Roberto Barros Silva</option>
+            <option value="Francisco Roberto Farias Dias">Francisco Roberto Farias Dias</option>
+            <option value="Francisco Uerbeson Caetano De Sousa">Francisco Uerbeson Caetano De Sousa</option>
+            <option value="Francisco Werbster Perdigao Honorato">Francisco Werbster Perdigao Honorato</option>
+            <option value="Gilberto Evangelista dos Santos">Gilberto Evangelista dos Santos</option>
+            <option value="Givanildo Martins Do Nascimento">Givanildo Martins Do Nascimento</option>
+            <option value="Gleidson Da Silva Facundo">Gleidson Da Silva Facundo</option>
+            <option value="Helber Carneiro Gomes">Helber Carneiro Gomes</option>
+            <option value="Henrique De Lima Oliveira Da Cunha">Henrique De Lima Oliveira Da Cunha</option>
+            <option value="Irapuan Azevedo Ferreira">Irapuan Azevedo Ferreira</option>
+            <option value="Jader Viana Galdino">Jader Viana Galdino</option>
+            <option value="Jair Araujo Ferreira">Jair Araujo Ferreira</option>
+            <option value="Jardel da Silva Araújo">Jardel da Silva Araújo</option>
+            <option value="Jayrton Almeida De Oliveira">Jayrton Almeida De Oliveira</option>
+            <option value="Jeferson Alves Do Nascimento">Jeferson Alves Do Nascimento</option>
+            <option value="Jheimisson Farias Cabral">Jheimisson Farias Cabral</option>
+            <option value="Joao Batista da Costa">Joao Batista da Costa</option>
+            <option value="Joao Evangelista Pereira Barbosa">Joao Evangelista Pereira Barbosa</option>
+            <option value="Joao Marques Da Silva Neto">Joao Marques Da Silva Neto</option>
+            <option value="Johny Angelo Zalouth">Johny Angelo Zalouth</option>
+            <option value="Jonathan Costa Do Nascimento">Jonathan Costa Do Nascimento</option>
+            <option value="Jonathan Da Silva Evangelista">Jonathan Da Silva Evangelista</option>
+            <option value="Jorge Luiz Nascimento dos Santos">Jorge Luiz Nascimento dos Santos</option>
+            <option value="Jorge William Da Rocha Leitao">Jorge William Da Rocha Leitao</option>
+            <option value="Jose Airton De Freitas Filho">Jose Airton De Freitas Filho</option>
+            <option value="Jose Anderson De Sousa Da Rocha">Jose Anderson De Sousa Da Rocha</option>
+            <option value="Jose Aristonio Silveira Silva">Jose Aristonio Silveira Silva</option>
+            <option value="Jose Atila Ferreira Soares">Jose Atila Ferreira Soares</option>
+            <option value="Jose Carlos Marques da Silva">Jose Carlos Marques da Silva</option>
+            <option value="Jose Carlos Paulino Da Silva">Jose Carlos Paulino Da Silva</option>
+            <option value="Jose Claudecy Pinto De Lima">Jose Claudecy Pinto De Lima</option>
+            <option value="Jose Cledilson Magalhaes De Sousa">Jose Cledilson Magalhaes De Sousa</option>
+            <option value="Jose Cleisio Araujo">Jose Cleisio Araujo</option>
+            <option value="Jose Davi Do Nascimento Morais">Jose Davi Do Nascimento Morais</option>
+            <option value="Jose de Arimateia Lima e Silva Sobrinho">Jose de Arimateia Lima e Silva 				Sobrinho</option>
+            <option value="Jose Eduardo Matos Vieira Costa">Jose Eduardo Matos Vieira Costa</option>
+            <option value="Jose Humberto Da Silva">Jose Humberto Da Silva</option>
+            <option value="Jose Jackson Da Silva">Jose Jackson Da Silva</option>
+            <option value="Jose Marcelo De Carvalho">Jose Marcelo De Carvalho</option>
+            <option value="Jose Maria Lopes Junior">Jose Maria Lopes Junior</option>
+            <option value="Jose Mauricelio Silva Secunde">Jose Mauricelio Silva Secunde</option>
+            <option value="Jose Milton Dias Neto">Jose Milton Dias Neto</option>
+            <option value="Jose Ribamar De Sousa Melo Filho">Jose Ribamar De Sousa Melo Filho</option>
+            <option value="Jose Robson Bandeira Gomes">Jose Robson Bandeira Gomes</option>
+            <option value="Jose Tarcísio Da Silva Lobao">Jose Tarcísio Da Silva Lobao</option>
+            <option value="Josean Costa de Souza">Josean Costa de Souza</option>
+            <option value="Josias Xavier Da Costa">Josias Xavier Da Costa</option>
+            <option value="Jussier Farias Pereira">Jussier Farias Pereira</option>
+            <option value="Lairton Ferreira De Araujo">Lairton Ferreira De Araujo</option>
+            <option value="Leonardo Silva Sousa">Leonardo Silva Sousa</option>
+            <option value="Lucas dos Santos Lima">Lucas dos Santos Lima</option>
+            <option value="Lucas Dos Santos Nascimento">Lucas Dos Santos Nascimento</option>
+            <option value="Luiz Moises Alves De Oliveira">Luiz Moises Alves De Oliveira</option>
+            <option value="Manoel Euzebio Ferreira">Manoel Euzebio Ferreira</option>
+            <option value="Marcio Bandeira Dias">Marcio Bandeira Dias</option>
+            <option value="Marcio da Silva Coelho">Marcio da Silva Coelho</option>
+            <option value="Marcio Ferreira Sombra">Marcio Ferreira Sombra</option>
+            <option value="Marcos Alberto Da Silva Rocha Filho">Marcos Alberto Da Silva Rocha Filho</option>
+            <option value="Marcos Aurelio Pereira De Matos">Marcos Aurelio Pereira De Matos</option>
+            <option value="Marcos Fernando Da Silva">Marcos Fernando Da Silva</option>
+            <option value="Mardone Alves Barbosa">Mardone Alves Barbosa</option>
+            <option value="Mario Sergio Forte Pinto">Mario Sergio Forte Pinto</option>
+            <option value="Marlio Gleudo Vasconcelos Da Silva">Marlio Gleudo Vasconcelos Da Silva</option>
+            <option value="Maryanne De Sousa Rabelo Aires">Maryanne De Sousa Rabelo Aires</option>
+            <option value="Maximiliano Rodrigues De Morais">Maximiliano Rodrigues De Morais</option>
+            <option value="Micias Leandro Matias">Micias Leandro Matias</option>
+            <option value="Milton Carlos Da Cunha Dos Santos">Milton Carlos Da Cunha Dos Santos</option>
+            <option value="Nayane Menezes Cavalcante">Nayane Menezes Cavalcante</option>
+            <option value="Orlando Vitor Rodrigues Dos Santos">Orlando Vitor Rodrigues Dos Santos</option>
+            <option value="Paulo Henrique Dias Costa">Paulo Henrique Dias Costa</option>
+            <option value="Paulo Henrique Pereira da Silva">Paulo Henrique Pereira da Silva</option>
+            <option value="Paulo Henrique Silva De Lima">Paulo Henrique Silva De Lima</option>
+            <option value="Paulo Ozeas Linhares">Paulo Ozeas Linhares</option>
+            <option value="Paulo Rogerio Almeida Dos Santos">Paulo Rogerio Almeida Dos Santos</option>
+            <option value="Pedro Henrique Oliveira De Araujo">Pedro Henrique Oliveira De Araujo</option>
+            <option value="Rafael Alves De Sousa">Rafael Alves De Sousa</option>
+            <option value="Rafael Amorim Da Silva">Rafael Amorim Da Silva</option>
+            <option value="Rafaela De Miranda Souza">Rafaela De Miranda Souza</option>
+            <option value="Raimundo Braz de Lima Neto">Raimundo Braz de Lima Neto</option>
+            <option value="Raimundo Da Costa">Raimundo Da Costa</option>
+            <option value="Raimundo Gilberto Martins Beserra">Raimundo Gilberto Martins Beserra</option>
+            <option value="Raimundo Pereira da Silva Neto">Raimundo Pereira da Silva Neto</option>
+            <option value="Raphael Figueiredo Aquino">Raphael Figueiredo Aquino</option>
+            <option value="Reinaldo Sousa De Oliveira">Reinaldo Sousa De Oliveira</option>
+            <option value="Renato Bento Viana">Renato Bento Viana</option>
+            <option value="Renato Diniz Ferreira">Renato Diniz Ferreira</option>
+            <option value="Renato Leite Barroso">Renato Leite Barroso</option>
+            <option value="Ricardo Alves Maia">Ricardo Alves Maia</option>
+            <option value="Rilton Motta Carneiro">Rilton Motta Carneiro</option>
+            <option value="Roberto Cardoso Da Silva">Roberto Cardoso Da Silva</option>
+            <option value="Roberto Moreira Maciel">Roberto Moreira Maciel</option>
+            <option value="Rogerio Aquino De Souza">Rogerio Aquino De Souza</option>
+            <option value="Ronaldo da Silva Mesquita">Ronaldo da Silva Mesquita</option>
+            <option value="Samara Maciel Correia">Samara Maciel Correia</option>
+            <option value="Samuel Peixoto Da Costa Neto">Samuel Peixoto Da Costa Neto</option>
+            <option value="Sergio Luiz Alves Fernandes">Sergio Luiz Alves Fernandes</option>
+            <option value="Silvano Mesquita Barroso">Silvano Mesquita Barroso</option>
+            <option value="Thalisson Dias Nunes">Thalisson Dias Nunes</option>
+            <option value="Valdemir Soares Leite">Valdemir Soares Leite</option>
+            <option value="Vanderson Da Silva Lima">Vanderson Da Silva Lima</option>
+            <option value="Vilamar Costa Da Silva">Vilamar Costa Da Silva</option>
+            <option value="Vladimir Alves Vasconcelos">Vladimir Alves Vasconcelos</option>
+            <option value="Vladimy Campos Rocha">Vladimy Campos Rocha</option>
+        </select>
+
+        <div class="line"></div>
+
+        <!-- Status das câmeras -->
+        <label for="dvr-status">🖥️ DVR:</label>
+        <select id="dvr-status">
+            <option value="Funcionando">Funcionando</option>
+            <option value="Inoperante">Inoperante</option>
+        </select>
+
+        <label for="frontal-status">📸 Frontal:</label>
+        <select id="frontal-status">
+            <option value="Funcionando">Funcionando</option>
+            <option value="Inoperante">Inoperante</option>
+            <option value="Não tem instalada">Não tem instalada</option>
+            <option value="Embaçada">Embaçada</option>
+        </select>
+
+        <label for="tripod-status">📸 Trípé:</label>
+        <select id="tripod-status">
+            <option value="Funcionando">Funcionando</option>
+            <option value="Inoperante">Inoperante</option>
+            <option value="Não tem instalada">Não tem instalada</option>
+            <option value="Embaçada">Embaçada</option>
+        </select>
+
+        <label for="basket-status">📸 Cesto:</label>
+        <select id="basket-status">
+            <option value="Funcionando">Funcionando</option>
+            <option value="Inoperante">Inoperante</option>
+            <option value="Não tem instalada">Não tem instalada</option>
+            <option value="Embaçada">Embaçada</option>
+        </select>
+
+        <label for="rear-status">📸 Ré:</label>
+        <select id="rear-status">
+            <option value="Funcionando">Funcionando</option>
+            <option value="Inoperante">Inoperante</option>
+            <option value="Não tem instalada">Não tem instalada</option>
+            <option value="Embaçada">Embaçada</option>
+        </select>
+
+        <div class="line"></div>
+
+        <!-- Outras opções -->
+        <label for="disponibilidade">🕑 QUAL DISPONIBILIDADE DA VIATURA:</label>
+        <select id="disponibilidade">
+            <option value="Informar Horário">Informar Horário</option>
+            <option value="Após 07h">Após 07h</option>
+            <option value="Após 08h">Após 08h</option>
+            <option value="Após 09h">Após 09h</option>
+            <option value="Após 10h">Após 10h</option>
+            <option value="Após 11h">Após 11h</option>
+            <option value="Após 12h">Após 12h</option>
+            <option value="Após 13h">Após 13h</option>
+            <option value="Após 14h">Após 14h</option>
+            <option value="Após 15h">Após 15h</option>
+            <option value="Após 16h">Após 16h</option>
+            <option value="Após 17h">Após 17h</option>
+            <option value="Após 18h">Após 18h</option>
+            <option value="Após 19h">Após 19h</option>
+            <option value="Após 20h">Após 20h</option>
+            <option value="Após 21h">Após 21h</option>
+            <option value="Após 22h">Após 22h</option>
+            <option value="Após 23h">Após 23h</option>
+        </select>
+
+        <label for="dvr-resolucao">🖥️ RESOLUÇÃO GRAVAÇÃO:</label>
+        <select id="dvr-resolucao">
+            <option value="Precisa Ajustar Configuração">Precisa Ajustar RESOLUÇÃO (HD 1280x720)</option>
+            <option value="Não precisa config.">NÃO PRECISA CONFIGURAR</option>
+        </select>
+                
+        <label for="dvr-placa">🖥️ PLACA EXIBIDA NA GRAVAÇÃO:</label>
+        <select id="dvr-placa">
+            <option value="Precisa Ajustar Configuração">Precisa Ajustar Configuração</option>
+            <option value="Não precisa config.">NÃO PRECISA CONFIGURAR</option>
+        </select>
+
+        <div class="line"></div>
+        
+        <div id="popup" class="show">
+            <p id="popup-message">Mensagem de exemplo</p>
+            <button id="popup-close" class="button-default">Fechar</button>
+        </div>
+
+        <!-- Botões -->
+        <div>
+            <button type="button" class="button-gerarMensagem" id="generateMessageButton">Gerar mensagem</button>
+            <button type="button" class="button-enviarWhatsApp" id="sendWhatsAppButton">Enviar no WhatsApp</button>
+            <button type="button" class="clear-button" id="clearButton">Limpar mensagem</button>
+            <button type="button" class="button-copiarMensagem" id="copyMessageButton">Copiar mensagem</button>
+        </div>
+    </form>
+
+    <div class="preview-box">
+        <pre id="message-preview"></pre>
+    </div>
+
+    <br>
+    <!-- Logo da ENEL -->
+    <img src="https://upload.wikimedia.org/wikipedia/commons/2/22/Enel_Group_logo.svg" alt="Logo ENEL" style="width: 193px; height: auto; display: block; margin-left: auto; margin-right: auto;">    
+    <p style="text-align: center; font-style: italic; font-family: 'Courier New', Courier, monospace; margin-top: 40px;"> © 2025 Emanuel Aguiar (Assistente Administrativo Insourcing - Enel CE)<br>Todos os direitos reservados.</p>
+    
+    <script>
+        function formatarData(data) {
+            const partes = data.split("-");
+            return `${partes[2]}/${partes[1]}/${partes[0]}`;
+        }
+
+        document.getElementById('generateMessageButton').addEventListener('click', function () {
+            const placa = document.getElementById('placa').value;
+            const responsavel = document.getElementById('responsavel').value;
+            const dvrStatus = document.getElementById('dvr-status').value;
+            const frontalStatus = document.getElementById('frontal-status').value;
+            const tripodStatus = document.getElementById('tripod-status').value;
+            const basketStatus = document.getElementById('basket-status').value;
+            const rearStatus = document.getElementById('rear-status').value;
+            const disponibilidade = document.getElementById('disponibilidade').value;
+
+            const checkInDate = document.getElementById('check-in-date').value;
+            const checkInDateFormatted = formatarData(checkInDate);
+
+            let message = `-------- *NECESSÁRIO ABERTURA DE CHAMADO* --------\n\n`;
+            message += `*DADOS DA VIATURA*\n`;
+            message += `*DATA CHECK IN:* ${checkInDateFormatted}\n`;
+            message += `*PLACA:* ${placa}\n`;
+            message += `*RESPONSÁVEL DO CHECKLIST:* ${responsavel}\n\n`;
+            message += `------------------- *RESUMO* ---------------------\n\n`;
+            message += `*DVR:* ${dvrStatus}\n`;
+            message += `*FRONTAL:* ${frontalStatus}\n`;
+            message += `*TRÍPE:* ${tripodStatus}\n`;
+            message += `*CESTO:* ${basketStatus}\n`;
+            message += `*RÉ:* ${rearStatus}\n\n`;
+            message += `----------------- *MANUTENÇÃO* ------------------\n\n`;
+            message += `*DISPONIBILIDADE VIATURA:* ${disponibilidade}\n`;
+            message += `*RESOLUÇÃO GRAVAÇÃO:* ${document.getElementById('dvr-resolucao').value}\n`;
+            message += `*PLACA EXIBIDA:* ${document.getElementById('dvr-placa').value}\n\n`;
+            
+            message += `------------------- *NOTAS* --------------------\n\n`;
+            
+            let equipamentosComProblema = [];
+            if (frontalStatus === "Inoperante" || frontalStatus === "Embaçada") equipamentosComProblema.push("FRONTAL");
+            if (tripodStatus === "Inoperante" || tripodStatus === "Embaçada") equipamentosComProblema.push("TRÍPE");
+            if (basketStatus === "Inoperante" || basketStatus === "Embaçada") equipamentosComProblema.push("CESTO");
+            if (rearStatus === "Inoperante" || rearStatus === "Embaçada") equipamentosComProblema.push("RÉ");
+
+            if (equipamentosComProblema.length > 0) {
+                message += `*Equipamentos com problemas:*\n\n`;
+                message += equipamentosComProblema.join(", ") + ".\n\n";
+            }
+
+            document.getElementById('message-preview').textContent = message;
+        });
+
+        document.getElementById('clearButton').addEventListener('click', function () {
+            document.getElementById('message-preview').textContent = '';
+        });
+
+        document.getElementById('sendWhatsAppButton').addEventListener('click', function () {
+            const message = document.getElementById('message-preview').textContent;
+            const phoneNumber = "whatsapp://send?text=" + encodeURIComponent(message);
+            window.open(phoneNumber);
+        });
+
+        document.getElementById('copyMessageButton').addEventListener('click', function () {
+            const message = document.getElementById('message-preview').textContent;
+            navigator.clipboard.writeText(message).then(function() {
+                // Exibe o popup após copiar a mensagem com sucesso
+                document.getElementById('popup-message').textContent = "Mensagem copiada!";
+                document.getElementById('popup').style.display = 'block';
+            }).catch(function(error) {
+                console.error("Erro ao copiar a mensagem: ", error);
+            });
+        });
+
+        // Event listener para fechar o popup
+        document.getElementById('popup-close').addEventListener('click', function () {
+            document.getElementById('popup').style.display = 'none';
+        });
+    </script>
+</body>
+</html>
