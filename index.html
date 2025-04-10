@@ -317,7 +317,7 @@
       const val = value.toString().trim().toUpperCase();
       if (val === "SIM") return "Funcionando";
       if (val === "NÃO" || val === "NAO") return "Inoperante";
-      if (val === "NA") return "Não tem instalada";
+      if (val === "(NA) JUSTIFICAR ABAIXO MOTIVO") return "Não tem instalada";
       return "Não Localizado";
     }
 
