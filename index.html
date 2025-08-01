@@ -270,7 +270,6 @@
     <div>
       <button type="button" class="button-enviarWhatsApp" id="sendWhatsAppButton">Enviar no WhatsApp</button>
       <button type="button" class="clear-button" id="clearButton">Limpar mensagem</button>
-      <button type="button" class="button-copiarMensagem" id="copyMessageButton">Copiar mensagem</button>
     </div>
   </form>
 
@@ -505,17 +504,7 @@
       const phoneNumber = "whatsapp://send?text=" + encodeURIComponent(message);
       window.open(phoneNumber);
     });
-    
-    document.getElementById('copyMessageButton').addEventListener('click', function () {
-      const message = document.getElementById('message-preview').textContent;
-      navigator.clipboard.writeText(message).then(function() {
-        document.getElementById('popup-message').textContent = "Mensagem copiada!";
-        document.getElementById('popup').style.display = 'block';
-      }).catch(function(error) {
-        console.error("Erro ao copiar a mensagem: ", error);
-      });
-    });
-    
+     
     // Fechar o popup
     document.getElementById('popup-close').addEventListener('click', function () {
       document.getElementById('popup').style.display = 'none';
